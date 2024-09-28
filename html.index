@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIME</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>ANIME</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "What is the name of Naruto's father?", answer: "Minato Namikaze" },
+        { question: "Who is known as the 'Fullmetal Alchemist'?", answer: "Edward Elric" },
+        { question: "In Attack on Titan, who is the Armored Titan?", answer: "Reiner Braun" },
+        { question: "What is the name of Goku's signature attack in Dragon Ball Z?", answer: "Kamehameha" },
+        { question: "Who is the main protagonist of Death Note?", answer: "Light Yagami" },
+        { question: "In One Piece, what is the name of Luffy's pirate crew?", answer: "The Straw Hat Pirates" },
+        { question: "What is the name of the sword Inuyasha wields?", answer: "Tessaiga" },
+        { question: "Who created the anime My Neighbor Totoro?", answer: "Hayao Miyazaki" },
+        { question: "In Naruto, what is the name of Kakashi’s signature technique?", answer: "Chidori" },
+        { question: "In Sailor Moon, what planet does Sailor Mars represent?", answer: "Mars" },
+        { question: "In Dragon Ball Z, who was Gohan's first mentor after Piccolo?", answer: "Goku" },
+        { question: "What is the name of Ichigo Kurosaki's sword in Bleach?", answer: "Zangetsu" },
+        { question: "In Fullmetal Alchemist: Brotherhood, what is the first rule of alchemy?", answer: "Equivalent Exchange" },
+        { question: "What is the name of the giant wolf god in Princess Mononoke?", answer: "Moro" },
+        { question: "What are the names of the main duo in Cowboy Bebop?", answer: "Spike Spiegel and Jet Black" },
+        { question: "In One Punch Man, what is the name of Saitama's disciple?", answer: "Genos" },
+        { question: "Who is the main antagonist of the Hunter x Hunter Chimera Ant arc?", answer: "Meruem" },
+        { question: "In Attack on Titan, who is Eren Yeager's childhood friend?", answer: "Mikasa Ackerman" },
+        { question: "What are the names of the two brothers in Fullmetal Alchemist?", answer: "Edward and Alphonse Elric" },
+        { question: "In Naruto, what is the tailed beast inside Naruto called?", answer: "Kurama (Nine-Tailed Fox)" },
+        { question: "Which anime is famous for the quote 'Just who the hell do you think I am?'?", answer: "Tengen Toppa Gurren Lagann" },
+        { question: "In My Hero Academia, what is All Might’s real name?", answer: "Toshinori Yagi" },
+        { question: "Who is the captain of the 11th Division in Bleach?", answer: "Kenpachi Zaraki" },
+        { question: "What is the name of the girl with pink hair in Code Geass who pilots the Lancelot?", answer: "Euphemia li Britannia" },
+        { question: "Who wrote and illustrated One Piece?", answer: "Eiichiro Oda" },
+        { question: "In Dragon Ball Z, who does Vegeta marry?", answer: "Bulma" },
+        { question: "What is the name of the legendary ninja tool used by the Sage of Six Paths in Naruto?", answer: "The Rinnegan" },
+        { question: "In Death Note, what is the name of the Shinigami who drops the Death Note?", answer: "Ryuk" },
+        { question: "Who is the main protagonist of Sword Art Online?", answer: "Kirito (Kazuto Kirigaya)" },
+        { question: "Which anime features characters known as 'Titans'?", answer: "Attack on Titan" },
+        { question: "In One Piece, what is the name of the pirate who inspired Luffy to become a pirate?", answer: "Shanks" },
+        { question: "In Dragon Ball, what does Goku ride on?", answer: "Nimbus Cloud" },
+        { question: "Who is the leader of the Phantom Troupe in Hunter x Hunter?", answer: "Chrollo Lucilfer" },
+        { question: "In Naruto, what is Sasuke's signature ability?", answer: "Sharingan" },
+        { question: "In Attack on Titan, what is the name of the first Titan Eren fights?", answer: "The Colossal Titan" },
+        { question: "Who is the author of Naruto?", answer: "Masashi Kishimoto" },
+        { question: "Which anime follows high school students who must kill their alien teacher?", answer: "Assassination Classroom" },
+        { question: "In Tokyo Ghoul, what is Kaneki's half-ghoul form called?", answer: "One-Eyed Ghoul" },
+        { question: "In My Hero Academia, what is the name of the main protagonist's Quirk?", answer: "One For All" },
+        { question: "In Dragon Ball Super, who is Goku’s strongest rival in the Tournament of Power?", answer: "Jiren" },
+        { question: "In Bleach, what race of spirits does Ichigo battle?", answer: "Hollows" },
+        { question: "Who is the protagonist of Neon Genesis Evangelion?", answer: "Shinji Ikari" },
+        { question: "What is the name of the main pirate villain in One Piece before Luffy starts his journey?", answer: "Gol D. Roger" },
+        { question: "In Naruto, what are the two forms of the Mangekyo Sharingan?", answer: "Eternal Mangekyo Sharingan and Mangekyo Sharingan" },
+        { question: "What is the name of the mysterious creatures in Attack on Titan?", answer: "Titans" },
+        { question: "What anime features a character who can turn his hands into deadly blades?", answer: "Tokyo Ghoul (Kaneki Ken)" },
+        { question: "In My Hero Academia, who is the number two hero after All Might?", answer: "Endeavor" },
+        { question: "Who is the second Shinigami to appear in Death Note?", answer: "Rem" },
+        { question: "What is the primary ability of Edward Elric in Fullmetal Alchemist?", answer: "Alchemy without a transmutation circle" },
+        { question: "In Fairy Tail, who is Natsu Dragneel’s dragon parent?", answer: "Igneel" },
+        { question: "What anime features a famous scene with two characters dancing in a ballroom in the rain?", answer: "Your Lie in April (Kaori and Kousei)" },
+        { question: "In Naruto, which character is known as the 'Copy Ninja'?", answer: "Kakashi Hatake" },
+        { question: "Who is the author of Bleach?", answer: "Tite Kubo" },
+        { question: "In Sword Art Online, what is the name of the floating castle where players are trapped?", answer: "Aincrad" },
+        { question: "Who is the main antagonist in Yu Yu Hakusho?", answer: "Sensui" },
+        { question: "In Fullmetal Alchemist, what is the name of the homunculus who represents pride?", answer: "Pride" },
+        { question: "What anime has a notebook that can kill anyone whose name is written in it?", answer: "Death Note" },
+        { question: "In One Piece, what is Luffy’s Devil Fruit ability?", answer: "Gomu Gomu no Mi (Rubber Fruit)" },
+        { question: "In Dragon Ball Super, who is the God of Destruction of Universe 7?", answer: "Beerus" },
+        { question: "In My Hero Academia, what is the name of the hero with a frog-like Quirk?", answer: "Tsuyu Asui (Froppy)" },
+        { question: "Who is the leader of the Akatsuki in Naruto?", answer: "Pain (Nagato)" },
+        { question: "What anime features a family cursed to transform into animals of the Chinese zodiac?", answer: "Fruits Basket" },
+        { question: "In Attack on Titan, what is the military group that Eren, Mikasa, and Armin join?", answer: "Survey Corps" },
+        { question: "Who is the childhood friend of Edward Elric and later his wife in Fullmetal Alchemist?", answer: "Winry Rockbell" },
+        { question: "What is the name of the humanoid robot that fights for justice in Astro Boy?", answer: "Astro Boy" },
+        { question: "In Naruto, who becomes the 5th Hokage?", answer: "Tsunade" },
+        { question: "What is the name of the vampire-hunting group in Hellsing?", answer: "The Hellsing Organization" },
+        { question: "In One Piece, who is the navigator of the Straw Hat Pirates?", answer: "Nami" },
+        { question: "In Dragon Ball Z, who is Gohan’s first girlfriend?", answer: "Videl" },
+        { question: "What is the name of the legendary warrior race in Dragon Ball Z?", answer: "Saiyans" },
+        { question: "In Neon Genesis Evangelion, what are the giant robots called?", answer: "Evangelions (EVAs)" },
+        { question: "Who is the author of Attack on Titan?", answer: "Hajime Isayama" },
+        { question: "In Naruto, who becomes the 7th Hokage?", answer: "Naruto Uzumaki" },
+        { question: "In Tokyo Ghoul, what is the name of the organization that hunts ghouls?", answer: "CCG (Commission of Counter Ghoul)" },
+        { question: "What is the name of the sword technique used by Zoro in One Piece?", answer: "Santoryu (Three-Sword Style)" },
+        { question: "In Attack on Titan, what is Levi's rank in the Survey Corps?", answer: "Captain" },
+        { question: "In Fairy Tail, what guild is Lucy Heartfilia a member of?", answer: "Fairy Tail" },
+        { question: "In Dragon Ball Z, who fuses with Vegeta to create Vegito?", answer: "Goku" },
+        { question: "Who is the main antagonist of the Naruto series?", answer: "Madara Uchiha" },
+        { question: "What is the name of the powerful blue flames used by Rin Okumura in Blue Exorcist?", answer: "Satan's Flames" },
+        { question: "In One Punch Man, who is the strongest hero in the Hero Association?", answer: "Blast" },
+        { question: "In Attack on Titan, who kills the Beast Titan?", answer: "Levi Ackerman" },
+        { question: "What is the name of the virtual reality world in Sword Art Online?", answer: "Sword Art Online" },
+        { question: "In Naruto, who is the father of Boruto?", answer: "Naruto Uzumaki" },
+        { question: "What anime features the philosopher's stone?", answer: "Fullmetal Alchemist" },
+        { question: "In Dragon Ball Super, what transformation does Goku achieve after Super Saiyan Blue?", answer: "Ultra Instinct" },
+        { question: "In Attack on Titan, what are the walls called that protect humanity?", answer: "Wall Maria, Wall Rose, Wall Sina" },
+        { question: "What anime features a young boy with the power to wield a gun arm and giant robots?", answer: "Trigun" },
+        { question: "Who is the main character in Soul Eater?", answer: "Maka Albarn" },
+        { question: "In Naruto, what clan is known for its Byakugan?", answer: "Hyuga Clan" },
+        { question: "In My Hero Academia, who is the hero with explosion-based powers?", answer: "Katsuki Bakugo" },
+        { question: "Who is the main antagonist of Dragon Ball Z's Cell Saga?", answer: "Cell" },
+        { question: "What anime features a group of heroes trying to reclaim their stolen homeland from Titans?", answer: "Attack on Titan" },
+        { question: "In Bleach, what is Ichigo’s bankai form called?", answer: "Tensa Zangetsu" },
+        { question: "In Naruto, what is the name of the snake summoner?", answer: "Orochimaru" },
+        { question: "What anime features a bounty hunter crew aboard the spaceship Bebop?", answer: "Cowboy Bebop" },
+        { question: "In One Piece, what is the ancient weapon that can destroy islands?", answer: "Pluton" },
+        { question: "In Naruto, what is the name of Sasuke's brother?", answer: "Itachi Uchiha" },
+        { question: "In One Punch Man, what class is Genos in the Hero Association?", answer: "S-Class" },
+        { question: "What anime has characters who fight using large humanoid robots known as 'Gundams'?", answer: "Mobile Suit Gundam" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the questions
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
